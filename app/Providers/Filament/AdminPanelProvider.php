@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\UserResource\Widgets\StatsOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -51,6 +52,12 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->widgets([
+            Widgets\AccountWidget::class,
+            StatsOverview::class  // Votre nouveau widget
+          //  Widgets\UserRegistrationsChart::class, // Le widget avec graphique
+             ])
+          //  ->locale('fr')
             ->authMiddleware([
                 Authenticate::class,
             ]);
