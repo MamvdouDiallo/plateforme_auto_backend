@@ -2,16 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Vehicule;
+use App\traits\ResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use \App\Models\Marque;
 
-class marque extends Controller
+class MarqueController extends Controller
 {
+
+    use ResponseTrait;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return $this->responseData(
+            '',
+            Response::HTTP_ACCEPTED,
+            "",
+            Marque::all()
+        );
+    }
+
+    public function getVehicules(Request $request){
+        $vehicules = Vehicule::where('marque_id', $request->id)->get();
+        return $this->responseData(
+            '',
+            Response::HTTP_ACCEPTED,
+            "",
+            $vehicules
+        );
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CategorySeeder extends Seeder
 {
@@ -13,14 +14,19 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::create([
-            'libelle' => 'Pick-up',
-            'description' => 'Véhicules sortis d\'usine'
-        ]);
+        $categories = [
+            ['libelle' => 'Berline', 'description' => 'Voiture à 4 portes avec coffre'],
+            ['libelle' => 'SUV', 'description' => 'Véhicule utilitaire sport'],
+            ['libelle' => 'Coupé', 'description' => 'Voiture 2 portes sportive'],
+            ['libelle' => 'Cabriolet', 'description' => 'Voiture décapotable'],
+            ['libelle' => 'Pick-up', 'description' => 'Véhicule avec benne à l’arrière'],
+            ['libelle' => 'Hatchback', 'description' => 'Voiture compacte avec hayon'],
+            ['libelle' => 'Monospace', 'description' => 'Véhicule familial spacieux'],
+            ['libelle' => 'Break', 'description' => 'Voiture allongée avec grand coffre'],
+            ['libelle' => '4x4', 'description' => 'Véhicule à transmission intégrale'],
+            ['libelle' => 'Utilitaire', 'description' => 'Véhicule pour usage professionnel'],
+        ];
 
-        Category::create([
-            'libelle' => '4x4',
-            'description' => 'Véhicules ayant déjà eu un propriétaire'
-        ]);
+        DB::table('categories')->insert($categories);
     }
 }

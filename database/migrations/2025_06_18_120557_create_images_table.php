@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->string("url");
-            $table->foreignIdFor(\App\Models\vehicule::class)->constrained();
+            $table->foreignIdFor(\App\Models\Vehicule::class)->constrained();
             $table->boolean("is_first")->default(false);
             $table->timestamps();
         });

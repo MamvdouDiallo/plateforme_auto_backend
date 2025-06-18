@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('vehicules', function (Blueprint $table) {
             $table->id();
             $table->string("type_transmission")->nullable();
+            $table->string("libelle")->nullable();
             $table->string("etat")->nullable();
             $table->string("type_carburant")->nullable();
             $table->string("type_conduite")->nullable();
@@ -28,6 +29,9 @@ return new class extends Migration
             $table->string("autre_option")->nullable();
             $table->string("kilometrage")->nullable();
             $table->bigInteger("prix")->default(0);
+            $table->foreignIdFor(\App\Models\ModelVehicule::class)->constrained();
+            $table->foreignIdFor(\App\Models\Marque::class)->constrained();
+            $table->foreignIdFor(\App\Models\Category::class)->constrained();
             $table->timestamps();
         });
     }
