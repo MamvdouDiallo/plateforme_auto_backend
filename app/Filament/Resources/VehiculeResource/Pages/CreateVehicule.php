@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateVehicule extends CreateRecord
 {
     protected static string $resource = VehiculeResource::class;
+
+            protected function getRedirectUrl(): string
+{
+    return $this->getResource()::getUrl('index');
+}
 }

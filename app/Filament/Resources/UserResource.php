@@ -79,50 +79,35 @@ class UserResource extends Resource
                         Forms\Components\TextInput::make('pays')
                             ->nullable(),
                     ])->columns(2),
+Forms\Components\Section::make('Sécurité')
+    ->schema([
+        Forms\Components\TextInput::make('password')
+            ->password()
+            ->label('Mot de passe')
+            ->required()
+            ->maxLength(255)
+            ->confirmed()
+            ->dehydrated(fn (?string $state): bool => filled($state)),
 
-                Forms\Components\Section::make('Sécurité')
-                    ->schema([
-                        Forms\Components\TextInput::make('password')
-                            ->password()
-                            ->required(fn(string $operation): bool => $operation === 'create')
-                            ->dehydrated(fn(?string $state): bool => filled($state))
-                            ->maxLength(255)
-                            ->confirmed(),
-
-                        Forms\Components\TextInput::make('password_confirmation')
-                            ->password()
-                            ->requiredWith('password')
-                            ->maxLength(255),
-                    ]),
+        Forms\Components\TextInput::make('password_confirmation')
+            ->password()
+            ->label('Confirmation du mot de passe')
+            ->requiredWith('password')
+            ->maxLength(255)
+            ->same('password'),
+    ])
+    ->columns(2)
+    ->visible(fn (string $operation): bool => $operation === 'create'), // <-- La clé ici
 
                      Forms\Components\Select::make('role_id') // Utilisez votre clé étrangère
                 ->label('Rôle')
                 ->relationship('role', 'libelle') // Relation AU SINGULIER
                 ->required()
                 ->native(false),
-            ]);
+    ]);
     }
 
     /*
-
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
 
 */
     public static function table(Table $table): Table
@@ -189,6 +174,7 @@ class UserResource extends Resource
         {
             return Static::getModel()::count();
         }
+
 
 
 

@@ -28,14 +28,15 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->darkMode(true) // <-- Activer le dark mode par défaut
             ->id('admin')
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => '#2D3436',
             ])
             //->sidebarCollapsibleOnDesktop()
-            ->sidebarWidth('13rem')
+            ->sidebarWidth('20rem')
              ->brandLogo(asset('images/mansourMotors.jpeg'))
              ->favicon(asset('images/favicon.ico'))
             // ->brandLogo(asset('images/logo.svg'))

@@ -4,14 +4,21 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\VehiculeResource\Pages;
 use App\Filament\Resources\VehiculeResource\RelationManagers;
+use App\Models\ModelVehicule;
 use App\Models\Vehicule;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\Pages\CreateRecord;
+//use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class VehiculeResource extends Resource
 {
@@ -21,24 +28,26 @@ class VehiculeResource extends Resource
 
     public static function form(Form $form): Form
     {
+
+        // Log::info("Tentative de création d'1 véhicule : {}");
         return $form
             ->schema([
 
-                Forms\Components\Fieldset::make('Images du véhicule')
-                    ->schema([
-                        Forms\Components\FileUpload::make('images')
-                            ->label('Ajouter des images')
-                            ->multiple()
-                          //  ->enableReordering()
-                            ->image()
-                            ->preserveFilenames()
-                            ->maxSize(5120)
-                            ->directory('vehicules/images')
-                           // ->enableOpen()
-                           // ->enableDownload()
-                          //  ->enablePreview()
-                            ->helperText('Déposez ici plusieurs images du véhicule.'),
-                    ])->columnSpanFull(),
+                Forms\Components\FileUpload::make('images')
+                    ->label('Images du véhicule')
+                    ->multiple()
+                    ->image()
+                    ->imageEditor()
+                    ->required()
+                    ->minFiles(1)
+                    ->directory('vehicules/temp')
+                    ->reorderable()
+                    ->downloadable()
+                    ->openable()
+                    ->dehydrated(false) // 🔥 empêche de l’enregistrer dans la table vehicules
+                    ->helperText('Téléchargez au moins une image du véhicule. La première image sera considérée comme image principale.')
+                    ->columnSpanFull(),
+
 
                 Forms\Components\Fieldset::make('Informations techniques du véhicule')
                     ->schema([
@@ -120,23 +129,63 @@ class VehiculeResource extends Resource
 
                 Forms\Components\Fieldset::make('Liens avec d’autres entités')
                     ->schema([
-                        Forms\Components\TextInput::make('model_vehicule_id')
-                            ->label('Modèle')
-                            ->required()
-                            ->numeric(),
-
                         Forms\Components\Select::make('marque_id')
-                            ->relationship('marque', 'id')
                             ->label('Marque')
-                            ->required(),
-
-                        Forms\Components\TextInput::make('category_id')
-                            ->label('Catégorie')
+                            ->relationship('marque', 'libelle') // Supposons que 'nom' est le champ à afficher
                             ->required()
-                            ->numeric(),
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(function (Forms\Set $set) {
+                                $set('model_vehicule_id', null); // Réinitialise le modèle quand la marque change
+                            }),
+
+                        Forms\Components\Select::make('model_vehicule_id')
+                            ->label('Modèle')
+                            ->relationship('modele', 'libelle') // Supposons que 'nom' est le champ à afficher
+                            ->required()
+                            ->searchable()
+                            ->preload(),
+
+
+                        Forms\Components\Select::make('category_id')
+                            ->label('Catégorie')
+                            ->relationship('categorie', 'libelle') // Supposons que 'nom' est le champ à afficher
+                            ->required()
+                            ->searchable()
+                            ->preload(),
                     ]),
             ]);
     }
+    public static function afterCreate(CreateRecord $operation, Vehicule $record): void
+    {
+        //  info("Tentative de création d'1 ");
+
+        Log::info("Tentative de création d : {$record->libelle}");
+
+        $images = $operation->getForm('form')->getState()['images'] ?? [];
+
+
+        foreach ($images as $index => $imagePath) {
+
+            info("Tentative de création d'image : $imagePath");
+
+            dd($imagePath);
+            if (Storage::disk('public')->exists($imagePath)) {
+                $filename = basename($imagePath);
+                $newPath = 'vehicules/images/' . $filename;
+
+                Storage::disk('public')->move($imagePath, $newPath);
+
+                $record->images()->create([
+                    'url' => $newPath,
+                    'is_first' => $index === 0,
+                ]);
+            }
+        }
+    }
+
+
 
 
     public static function table(Table $table): Table
@@ -209,6 +258,8 @@ class VehiculeResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+
+        info("Tentative de  d'1 ");
     }
 
     public static function getRelations(): array
@@ -227,8 +278,8 @@ class VehiculeResource extends Resource
         ];
     }
 
-            public static function getNavigationBadge(): ?string
-        {
-            return Static::getModel()::count();
-        }
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 }

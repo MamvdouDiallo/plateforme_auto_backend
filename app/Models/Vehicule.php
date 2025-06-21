@@ -7,10 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+
+use App\Models\Images;
+use Illuminate\Support\Facades\Storage;
 
 class Vehicule extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
 
     public function images() : HasMany{
         return $this->hasMany(Images::class);
@@ -24,4 +31,5 @@ class Vehicule extends Model
     public function modele() : BelongsTo{
         return $this->belongsTo(ModelVehicule::class, 'model_vehicule_id');
     }
+
 }
