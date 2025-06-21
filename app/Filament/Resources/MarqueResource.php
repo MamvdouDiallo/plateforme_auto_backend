@@ -22,11 +22,14 @@ class MarqueResource extends Resource
     {
         return $form
         ->schema([
+            Forms\Components\FileUpload::make('logo')
+                ->required()
+                ->image()
+                ->directory('logos'),
             Forms\Components\TextInput::make('libelle')
                 ->required()
                 ->maxLength(255)
                 ->unique(ignoreRecord: true),
-
             Forms\Components\MarkdownEditor::make('description')
                 ->nullable()
                 ->columnSpanFull(),
@@ -37,6 +40,7 @@ class MarqueResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('logo')->disk('public')->circular(),
                 Tables\Columns\TextColumn::make('libelle')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')

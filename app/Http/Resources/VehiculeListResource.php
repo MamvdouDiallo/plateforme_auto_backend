@@ -20,6 +20,7 @@ class VehiculeListResource extends JsonResource
             'modele' => $this->modele,
             'categorie' => $this->categorie,
             'prix' => $this->prix,
+            'images' => $this->images,
             'libelle' => $this->libelle,
             "kilometrage" => $this->kilometrage,
             "type_carburant" => $this->type_carburant,
