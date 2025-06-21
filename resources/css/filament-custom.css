@@ -25,5 +25,10 @@
 
 
 .fi-sidebar-nav {
-    background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
+    background: black;
+    color: white;
+}
+
+.max-w-7xl {
+    max-width: 100%;
 }
