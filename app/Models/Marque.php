@@ -5,13 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Marque extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function vehicules() : HasMany
     {
         return $this->hasMany(Vehicule::class);
+    }
+
+    public function getLogo()
+    {
+        return Storage::url($this->logo);
     }
 }
