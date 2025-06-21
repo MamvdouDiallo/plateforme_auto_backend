@@ -28,7 +28,7 @@ class CategoryResource extends Resource
                 ->maxLength(255)
                 ->unique(ignoreRecord: true),
 
-            Forms\Components\Textarea::make('description')
+            Forms\Components\MarkdownEditor::make('description')
                 ->nullable()
                 ->columnSpanFull(),
         ]);
@@ -49,6 +49,7 @@ public static function table(Table $table): Table
         ->actions([
             Tables\Actions\EditAction::make(),
             Tables\Actions\DeleteAction::make(),
+            Tables\Actions\ViewAction::make(),
         ])
         ->bulkActions([
             Tables\Actions\BulkActionGroup::make([
@@ -73,4 +74,9 @@ public static function table(Table $table): Table
             'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
+
+            public static function getNavigationBadge(): ?string
+        {
+            return Static::getModel()::count();
+        }
 }

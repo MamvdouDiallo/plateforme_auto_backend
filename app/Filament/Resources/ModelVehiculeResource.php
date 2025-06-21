@@ -21,7 +21,7 @@ class ModelVehiculeResource extends Resource
 {
     protected static ?string $model = ModelVehicule::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
 
     public static function form(Form $form): Form
     {
@@ -32,7 +32,7 @@ class ModelVehiculeResource extends Resource
                     ->maxLength(255)
                     ->unique(ignoreRecord: true),
 
-                Forms\Components\Textarea::make('description')
+                Forms\Components\MarkdownEditor::make('description')
                     ->nullable()
                     ->columnSpanFull(),
             ]);
@@ -97,4 +97,9 @@ class ModelVehiculeResource extends Resource
             'edit' => Pages\EditModelVehicule::route('/{record}/edit'),
         ];
     }
+
+        public static function getNavigationBadge(): ?string
+        {
+            return Static::getModel()::count();
+        }
 }

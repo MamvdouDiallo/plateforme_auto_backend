@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\RoleResource\Pages;
-use App\Filament\Resources\RoleResource\RelationManagers;
-use App\Models\Role;
+use App\Filament\Resources\MarqueResource\Pages;
+use App\Filament\Resources\MarqueResource\RelationManagers;
+use App\Models\Marque;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,12 +13,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class RoleResource extends Resource
+class MarqueResource extends Resource
 {
-    protected static ?string $model = Role::class;
+    protected static ?string $model = Marque::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
-
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
     public static function form(Form $form): Form
     {
         return $form
@@ -30,8 +29,8 @@ class RoleResource extends Resource
 
             Forms\Components\MarkdownEditor::make('description')
                 ->nullable()
-                ->columnSpan('full'),
-        ])->columns(2);
+                ->columnSpanFull(),
+        ]);
 }
 
     public static function table(Table $table): Table
@@ -76,13 +75,13 @@ class RoleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListRoles::route('/'),
-            'create' => Pages\CreateRole::route('/create'),
-            'edit' => Pages\EditRole::route('/{record}/edit'),
+            'index' => Pages\ListMarques::route('/'),
+            'create' => Pages\CreateMarque::route('/create'),
+            'edit' => Pages\EditMarque::route('/{record}/edit'),
         ];
     }
 
-            public static function getNavigationBadge(): ?string
+        public static function getNavigationBadge(): ?string
         {
             return Static::getModel()::count();
         }

@@ -10,6 +10,8 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Assets\Css;
+use Filament\Support\Assets\Js;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -18,6 +20,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Support\HtmlString;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -29,8 +32,14 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Blue,
             ])
+            //->sidebarCollapsibleOnDesktop()
+            ->sidebarWidth('13rem')
+             ->brandLogo(asset('images/mansourMotors.jpeg'))
+             ->favicon(asset('images/favicon.ico'))
+            // ->brandLogo(asset('images/logo.svg'))
+            ->brandLogoHeight('3rem') // Hauteur du logo
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -52,12 +61,9 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->widgets([
-            Widgets\AccountWidget::class,
-            StatsOverview::class  // Votre nouveau widget
-          //  Widgets\UserRegistrationsChart::class, // Le widget avec graphique
-             ])
-          //  ->locale('fr')
+
+             ->brandName('Mansour Motors')
+            //  ->locale('fr')
             ->authMiddleware([
                 Authenticate::class,
             ]);

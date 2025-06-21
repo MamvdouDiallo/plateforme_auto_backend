@@ -1,0 +1,17 @@
+
+
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'tailwindcss/variants';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.fi-sidebar-nav {
+    background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
+}
+
+

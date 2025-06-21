@@ -1,0 +1,29 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'tailwindcss/variants';
+
+
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Vos styles personnalisés avec @apply */
+.filament-sidebar {
+  @apply bg-gradient-to-b from-blue-800 to-blue-900;
+}
+
+.filament-sidebar-nav-link {
+  @apply border-l-3 border-transparent transition-all duration-300;
+}
+
+.filament-sidebar-nav-link:hover {
+  @apply bg-white bg-opacity-10 border-l-white;
+}
+
+
+.fi-sidebar-nav {
+    background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
+}
