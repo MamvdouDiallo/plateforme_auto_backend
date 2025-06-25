@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Filament\Resources;
+use Filament\Forms\Components\Hidden; // <-- Ajoute cette ligne
+use Illuminate\Support\Str;
 
 use App\Filament\Resources\VehiculeResource\Pages;
 use App\Filament\Resources\VehiculeResource\RelationManagers;
@@ -29,26 +31,34 @@ class VehiculeResource extends Resource
     public static function form(Form $form): Form
     {
 
-        // Log::info("Tentative de création d'1 véhicule : {}");
+
+        Log::info("Tentative de création d : }");
         return $form
-            ->schema([
+        ->schema([
+            Forms\Components\FileUpload::make('images')
+    ->label('Images du véhicule')
+    ->multiple()
+    ->image()
+    ->imageEditor()
+    ->required()
+    ->minFiles(1)
+    ->directory('vehicules/temp')
+    ->reorderable()
+    ->downloadable()
+    ->openable()
+    ->preserveFilenames()
+    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file) {
+       $filename = 'vehicule_'.'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
+        $path = $file->storeAs('vehicules/temp', $filename, 'public');
+        $paths = session()->get('temp_vehicule_images', []);
+        $paths[] = $path;
+       // session(['temp_vehicule_images' => $paths]);
+               session()->push('temp_vehicule_images', $path);
 
-                Forms\Components\FileUpload::make('images')
-                    ->label('Images du véhicule')
-                    ->multiple()
-                    ->image()
-                    ->imageEditor()
-                    ->required()
-                    ->minFiles(1)
-                    ->directory('vehicules/temp')
-                    ->reorderable()
-                    ->downloadable()
-                    ->openable()
-                    ->dehydrated(false) // 🔥 empêche de l’enregistrer dans la table vehicules
-                    ->helperText('Téléchargez au moins une image du véhicule. La première image sera considérée comme image principale.')
-                    ->columnSpanFull(),
-
-
+        return $path;
+    })
+    ->helperText('Téléchargez au moins une image du véhicule.')
+    ->columnSpanFull(),
                 Forms\Components\Fieldset::make('Informations techniques du véhicule')
                     ->schema([
                         Forms\Components\TextInput::make('libelle')
@@ -69,7 +79,6 @@ class VehiculeResource extends Resource
                             ->numeric()
                             ->default(0),
                     ]),
-
                 Forms\Components\Fieldset::make('Caractéristiques mécaniques')
                     ->schema([
                         Forms\Components\TextInput::make('type_transmission')
@@ -88,7 +97,6 @@ class VehiculeResource extends Resource
                             ->label('Type de conduite')
                             ->maxLength(255),
                     ]),
-
                 Forms\Components\Fieldset::make('Capacité du véhicule')
                     ->schema([
                         Forms\Components\TextInput::make('nombre_porte')
@@ -157,33 +165,25 @@ class VehiculeResource extends Resource
                     ]),
             ]);
     }
-    public static function afterCreate(CreateRecord $operation, Vehicule $record): void
-    {
-        //  info("Tentative de création d'1 ");
-
-        Log::info("Tentative de création d : {$record->libelle}");
-
-        $images = $operation->getForm('form')->getState()['images'] ?? [];
-
-
-        foreach ($images as $index => $imagePath) {
-
-            info("Tentative de création d'image : $imagePath");
-
-            dd($imagePath);
-            if (Storage::disk('public')->exists($imagePath)) {
-                $filename = basename($imagePath);
-                $newPath = 'vehicules/images/' . $filename;
-
-                Storage::disk('public')->move($imagePath, $newPath);
-
-                $record->images()->create([
-                    'url' => $newPath,
-                    'is_first' => $index === 0,
-                ]);
-            }
+public static function afterCreate(Model $record, array $data): void
+{
+    if (isset($data['images_paths'])) {
+        foreach ($data['images_paths'] as $path) {
+            $record->images()->create(['path' => $path]);
         }
     }
+}
+
+public static function mutateFormDataBeforeSave(array $data): array
+{
+    // Stocke les chemins des images dans 'images_paths'
+    if (isset($data['images'])) {
+        $data['images_paths'] = $data['images'];
+        unset($data['images']); // Évite l'erreur "parameterize()"
+    }
+    return $data;
+}
+
 
 
 
@@ -192,6 +192,20 @@ class VehiculeResource extends Resource
     {
         return $table
             ->columns([
+            // Colonne pour afficher la première image
+            Tables\Columns\ImageColumn::make('first_image')
+                ->label('Image Principale')
+                ->getStateUsing(function ($record) {
+                    // Récupère la première image marquée comme is_first ou la première de la liste
+                    return $record->images()->where('is_first', true)->first()?->url
+                           ?? $record->images()->first()?->url;
+                })
+                ->disk('public')
+                ->height(50)
+                ->width(50)
+                ->square(),
+
+
                 Tables\Columns\TextColumn::make('type_transmission')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('libelle')
@@ -282,4 +296,6 @@ class VehiculeResource extends Resource
     {
         return static::getModel()::count();
     }
+
+
 }

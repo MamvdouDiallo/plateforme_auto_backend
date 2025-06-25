@@ -16,7 +16,29 @@ class Vehicule extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+
+
+protected $fillable = [
+    'type_transmission',
+    'libelle',
+    'etat',
+    'type_carburant',
+    'type_conduite',
+    'version',
+    'nombre_porte',
+    'nombre_place',
+    'traction',
+    'option_interieur',
+    'option_exterieur',
+    'option_security',
+    'option_radio',
+    'autre_option',
+    'kilometrage',
+    'prix',
+    'model_vehicule_id', // Notez le nom de la clé étrangère
+    'marque_id',
+    'category_id'
+];
 
 
     public function images() : HasMany{
