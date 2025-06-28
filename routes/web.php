@@ -16,3 +16,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/storage/vehicules/images/{file}', function ($file) {
+    $path = storage_path("app/public/vehicules/images/{$file}");
+
+    if (!file_exists($path)) {
+        abort(404);
+    }
+
+    return response()->file($path, [
+        'Content-Type' => 'image/png',
+        'Cache-Control' => 'public, max-age=31536000'
+    ]);
+})->where('file', '.*');
