@@ -25,7 +25,7 @@ class MarqueResource extends Resource
             Forms\Components\FileUpload::make('logo')
                 ->required()
                 ->image()
-                ->directory('logos'),
+                ->directory('vehicules/images'),
             Forms\Components\TextInput::make('libelle')
                 ->required()
                 ->maxLength(255)
