@@ -20,11 +20,22 @@ class VehiculeListResource extends JsonResource
             'modele' => $this->modele,
             'categorie' => $this->categorie,
             'prix' => $this->prix,
-            'images' => $this->images,
+            'images' => $this->resource->getImages(),
             'libelle' => $this->libelle,
             "kilometrage" => $this->kilometrage,
             "type_carburant" => $this->type_carburant,
             "type_transmission" => $this->type_transmission
         ];
     }
+   
+    public function getImages(){
+        return array_filter([
+            $this->image1,
+            $this->image2,
+            $this->image3,
+            $this->image4,
+            $this->image5,
+        ]);
+    }
+
 }

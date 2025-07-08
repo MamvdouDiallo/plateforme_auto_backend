@@ -31,34 +31,42 @@ class VehiculeResource extends Resource
     public static function form(Form $form): Form
     {
 
-
-        Log::info("Tentative de création d : }");
         return $form
         ->schema([
-            Forms\Components\FileUpload::make('images')
-    ->label('Images du véhicule')
-    ->multiple()
-    ->image()
-    ->imageEditor()
-    ->required()
-    ->minFiles(1)
-    ->directory('vehicules/temp')
-    ->reorderable()
-    ->downloadable()
-    ->openable()
-    ->preserveFilenames()
-    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file) {
-       $filename = 'vehicule_'.'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
-        $path = $file->storeAs('vehicules/temp', $filename, 'public');
-        $paths = session()->get('temp_vehicule_images', []);
-        $paths[] = $path;
-       // session(['temp_vehicule_images' => $paths]);
-               session()->push('temp_vehicule_images', $path);
-
-        return $path;
-    })
-    ->helperText('Téléchargez au moins une image du véhicule.')
-    ->columnSpanFull(),
+             Forms\Components\Section::make('Images du véhicule')
+                ->schema([
+                    Forms\Components\FileUpload::make('image1')
+                        ->label('Image Principale')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+                        
+                    Forms\Components\FileUpload::make('image2')
+                        ->label('Image 2')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+                        
+                    Forms\Components\FileUpload::make('image3')
+                        ->label('Image 3')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+                        
+                    Forms\Components\FileUpload::make('image4')
+                        ->label('Image 4')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+                        
+                    Forms\Components\FileUpload::make('image5')
+                        ->label('Image 5')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+                ])
+                ->columns(2), 
+  
                 Forms\Components\Fieldset::make('Informations techniques du véhicule')
                     ->schema([
                         Forms\Components\TextInput::make('libelle')
@@ -193,19 +201,9 @@ public static function mutateFormDataBeforeSave(array $data): array
         return $table
             ->columns([
             // Colonne pour afficher la première image
-            Tables\Columns\ImageColumn::make('first_image')
+            Tables\Columns\ImageColumn::make('image1')
                 ->label('Image Principale')
-                ->getStateUsing(function ($record) {
-                    // Récupère la première image marquée comme is_first ou la première de la liste
-                    return $record->images()->where('is_first', true)->first()?->url
-                           ?? $record->images()->first()?->url;
-                })
-                ->disk('public')
-                ->height(50)
-                ->width(50)
-                ->square(),
-
-
+                ->size(40),
                 Tables\Columns\TextColumn::make('type_transmission')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('libelle')

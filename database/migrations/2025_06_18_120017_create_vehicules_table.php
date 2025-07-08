@@ -28,6 +28,11 @@ return new class extends Migration
             $table->string("option_radio")->nullable();
             $table->string("autre_option")->nullable();
             $table->string("kilometrage")->nullable();
+                $table->string('image1')->nullable();
+    $table->string('image2')->nullable();
+    $table->string('image3')->nullable();
+    $table->string('image4')->nullable();
+    $table->string('image5')->nullable();
             $table->bigInteger("prix")->default(0);
             $table->foreignIdFor(\App\Models\ModelVehicule::class)->constrained();
             $table->foreignIdFor(\App\Models\Marque::class)->constrained();

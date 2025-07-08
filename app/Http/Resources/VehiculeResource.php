@@ -24,7 +24,7 @@ class VehiculeResource extends JsonResource
             "kilometrage" => $this->kilometrage,
             "type_carburant" => $this->type_carburant,
             "type_transmission" => $this->type_transmission,
-            "images" => $this->images,
+            "images" => $this->getImages(),
             "type_conduite" => $this->type_conduite,
             "version" => $this->version,
             "nombre_porte" => $this->nombre_porte,
@@ -39,4 +39,15 @@ class VehiculeResource extends JsonResource
             "updated_at" => $this->updated_at
         ];
     }
+
+    public function getImages(){
+    return array_filter([
+        $this->image1,
+        $this->image2,
+        $this->image3,
+        $this->image4,
+        $this->image5,
+    ]);
+}
+
 }

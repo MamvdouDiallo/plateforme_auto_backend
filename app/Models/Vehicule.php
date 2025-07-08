@@ -37,10 +37,26 @@ protected $fillable = [
     'prix',
     'model_vehicule_id', // Notez le nom de la clé étrangère
     'marque_id',
-    'category_id'
+    'category_id',
+    'path',
+    'image1',
+        'image2',
+        'image3',
+        'image4',
+        'image5'
 ];
-
-
+    
+    public function getUrlAttribute()
+    {
+        return Storage::url($this->path);
+    }
+// Dans app/Models/Vehicule.php
+public function getTempImagesAttribute()
+{
+    return $this->images->map(function($image) {
+        return ['path' => $image->path];
+    })->toArray();
+}
     public function images() : HasMany{
         return $this->hasMany(Images::class);
     }
@@ -52,6 +68,25 @@ protected $fillable = [
     }
     public function modele() : BelongsTo{
         return $this->belongsTo(ModelVehicule::class, 'model_vehicule_id');
+    }   
+
+
+    public function getImageUrlsAttribute()
+    {
+        return $this->images->map(function($image) {
+            return Storage::url($image->path);
+        });
+    }
+
+
+    public function getImages(){
+        return array_filter([
+            $this->image1,
+            $this->image2,
+            $this->image3,
+            $this->image4,
+            $this->image5,
+        ]);
     }
 
 }
