@@ -241,14 +241,16 @@ public static function mutateFormDataBeforeSave(array $data): array
                 Tables\Columns\TextColumn::make('prix')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('model_vehicule_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('modele.libelle')
+                    ->label('Modèle')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('marque.id')
-                    ->numeric()
+
+                Tables\Columns\TextColumn::make('marque.libelle')
+                    ->label('Marque')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('category_id')
-                    ->numeric()
+
+                Tables\Columns\TextColumn::make('categorie.libelle')
+                    ->label('Catégorie')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
