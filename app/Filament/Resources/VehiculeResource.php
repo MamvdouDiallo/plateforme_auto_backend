@@ -36,28 +36,28 @@ class VehiculeResource extends Resource
         return $form
         ->schema([
             Forms\Components\FileUpload::make('images')
-    ->label('Images du véhicule')
-    ->multiple()
-    ->image()
-    ->imageEditor()
-    ->required()
-    ->minFiles(1)
-    ->directory('vehicules/temp')
-    ->reorderable()
-    ->downloadable()
-    ->openable()
-    ->preserveFilenames()
-    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file) {
-       $filename = 'vehicule_'.'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
-        $path = $file->storeAs('vehicules/temp', $filename, 'public');
-        $paths = session()->get('temp_vehicule_images', []);
-        $paths[] = $path;
-       // session(['temp_vehicule_images' => $paths]);
-               session()->push('temp_vehicule_images', $path);
+                ->label('Images du véhicule')
+                ->multiple()
+                ->image()
+                ->imageEditor()
+                ->required()
+                ->minFiles(1)
+                ->directory('vehicules/temp')
+                ->reorderable()
+                ->downloadable()
+                ->openable()
+                ->preserveFilenames()
+                ->saveUploadedFileUsing(function (TemporaryUploadedFile $file) {
+                   $filename = 'vehicule_'.'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
+                    $path = $file->storeAs('vehicules/temp', $filename, 'public');
+                    $paths = session()->get('temp_vehicule_images', []);
+                    $paths[] = $path;
+                   // session(['temp_vehicule_images' => $paths]);
+                           session()->push('temp_vehicule_images', $path);
 
-        return $path;
-    })
-    ->helperText('Téléchargez au moins une image du véhicule.')
+                    return $path;
+                })
+                ->helperText('Téléchargez au moins une image du véhicule.')
     ->columnSpanFull(),
                 Forms\Components\Fieldset::make('Informations techniques du véhicule')
                     ->schema([
@@ -164,6 +164,29 @@ class VehiculeResource extends Resource
                             ->preload(),
                     ]),
             ]);
+    }
+
+    public static function saved($record)
+    {
+        // Récupérer les chemins des images temporaires stockées dans la session
+        $paths = session()->get('temp_vehicule_images', []);
+
+        if (!empty($paths)) {
+            // Lier chaque image au véhicule
+            foreach ($paths as $path) {
+                $image = new Image([
+                    'url' => $path,
+                    'is_first' => false, // Initialiser 'is_first' à false
+                ]);
+                $record->images()->save($image); // Lier l'image au véhicule
+            }
+
+            // Marquer la première image comme principale
+            $record->images()->first()->update(['is_first' => true]);
+        }
+
+        // Réinitialiser les images temporaires dans la session
+        session()->forget('temp_vehicule_images');
     }
 public static function afterCreate(Model $record, array $data): void
 {
