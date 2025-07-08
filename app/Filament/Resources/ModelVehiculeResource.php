@@ -27,6 +27,10 @@ class ModelVehiculeResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\FileUpload::make('logo')
+                    ->required()
+                    ->image()
+                    ->directory('vehicules/images'),
                 Forms\Components\TextInput::make('libelle')
                     ->required()
                     ->maxLength(255)
@@ -44,6 +48,7 @@ class ModelVehiculeResource extends Resource
             ->schema([
                 Components\Section::make('Informations du modèle')
                     ->schema([
+                        Components\ImageEntry::make('logo'),
                         Components\TextEntry::make('libelle')
                             ->label('Modèle'),
 
@@ -58,6 +63,7 @@ class ModelVehiculeResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('logo')->disk('public')->circular(),
                 Tables\Columns\TextColumn::make('libelle')
                     ->searchable()
                     ->sortable(),

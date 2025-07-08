@@ -10,8 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategoryResource extends Resource
 {
@@ -23,6 +21,10 @@ class CategoryResource extends Resource
     {
         return $form
         ->schema([
+            Forms\Components\FileUpload::make('logo')
+                ->required()
+                ->image()
+                ->directory('vehicules/images'),
             Forms\Components\TextInput::make('libelle')
                 ->required()
                 ->maxLength(255)
@@ -38,6 +40,7 @@ public static function table(Table $table): Table
 {
     return $table
         ->columns([
+            Tables\Columns\ImageColumn::make('logo')->disk('public')->circular(),
             Tables\Columns\TextColumn::make('libelle')
                 ->searchable()
                 ->sortable(),
