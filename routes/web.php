@@ -1,6 +1,9 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +35,7 @@ Route::get('/', function () {
 //         'Cache-Control' => 'public, max-age=31536000'
 //     ]);
 // })->where('file', '.*');
+
 Route::get('/storage/vehicules/images/{file}', function ($file) {
     $path = storage_path("app/public/vehicules/images/{$file}");
 
@@ -39,7 +43,9 @@ Route::get('/storage/vehicules/images/{file}', function ($file) {
         abort(404);
     }
 
-    $mimeType = File::mimeType($path);
+    // Utilisation directe de finfo (pas besoin de 'use finfo;')
+    $finfo = new \finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $finfo->file($path);
 
     return response()->file($path, [
         'Content-Type' => $mimeType,
