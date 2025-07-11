@@ -1,9 +1,6 @@
 <?php
 
-
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\File;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -43,12 +40,16 @@ Route::get('/storage/vehicules/images/{file}', function ($file) {
         abort(404);
     }
 
-    // Utilisation directe de finfo (pas besoin de 'use finfo;')
-    $finfo = new \finfo(FILEINFO_MIME_TYPE);
-    $mimeType = $finfo->file($path);
+    $mimeType = File::mimeType($path);
+
+    // Correction pour les PDF si nécessaire
+    if (str_ends_with(strtolower($file), '.pdf')) {
+        $mimeType = 'application/pdf';
+    }
 
     return response()->file($path, [
         'Content-Type' => $mimeType,
         'Cache-Control' => 'public, max-age=31536000'
     ]);
 })->where('file', '.*');
+
