@@ -36,7 +36,16 @@ class VehiculeResource extends JsonResource
             "option_radio" => $this->option_radio,
             "autre_option" => $this->autre_option,
             "created_at" => $this->created_at,
-            "updated_at" => $this->updated_at
+            "updated_at" => $this->updated_at,
+            'size' => $this->size,
+            'condition' => $this->condition,
+            'engine' => $this->engine,
+            'cylinders' => $this->cylinders,
+            'color' => $this->color,
+            'vin' => $this->vin,
+            'year' => $this->year,
+            'description' => $this->description,
+            'technical_sheet' => $this->technical_sheet,
         ];
     }
 

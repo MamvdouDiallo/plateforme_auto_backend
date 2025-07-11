@@ -32,3 +32,5 @@ Route::get("/models/{id}/vehicules", [\App\Http\Controllers\ModelController::cla
 
 Route::get("/vehicules", [\App\Http\Controllers\VehiculeController::class, "index"]);
 Route::get("/vehicules/{vehicule}", [\App\Http\Controllers\VehiculeController::class, "show"]);
+
+Route::get("/users", [\App\Http\Controllers\UserController::class, "index"]);

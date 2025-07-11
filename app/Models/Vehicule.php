@@ -40,10 +40,19 @@ protected $fillable = [
     'category_id',
     'path',
     'image1',
-        'image2',
-        'image3',
-        'image4',
-        'image5'
+    'image2',
+    'image3',
+    'image4',
+    'image5',
+    'size',
+    'condition',
+    'engine',
+    'cylinders',
+    'color',
+    'vin',
+    'year',
+    'description',
+    'technical_sheet',
 ];
     
     public function getUrlAttribute()
