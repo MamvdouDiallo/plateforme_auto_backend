@@ -49,14 +49,5 @@ class VehiculeResource extends JsonResource
         ];
     }
 
-    public function getImages(){
-    return array_filter([
-        $this->image1,
-        $this->image2,
-        $this->image3,
-        $this->image4,
-        $this->image5,
-    ]);
 }
 
-}
