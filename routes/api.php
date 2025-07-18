@@ -34,3 +34,5 @@ Route::get("/vehicules", [\App\Http\Controllers\VehiculeController::class, "inde
 Route::get("/vehicules/{vehicule}", [\App\Http\Controllers\VehiculeController::class, "show"]);
 
 Route::get("/users", [\App\Http\Controllers\UserController::class, "index"]);
+Route::get("/tags", [\App\Http\Controllers\TagController::class, "index"]);
+Route::get("/blogs", [\App\Http\Controllers\BlogController::class, "index"]);
