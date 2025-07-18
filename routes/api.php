@@ -36,3 +36,6 @@ Route::get("/vehicules/{vehicule}", [\App\Http\Controllers\VehiculeController::c
 Route::get("/users", [\App\Http\Controllers\UserController::class, "index"]);
 Route::get("/tags", [\App\Http\Controllers\TagController::class, "index"]);
 Route::get("/blogs", [\App\Http\Controllers\BlogController::class, "index"]);
+Route::get("/blogs/{id}", [\App\Http\Controllers\BlogController::class, "show"]);
+Route::post("/blogs/{blog_id}/avis", [\App\Http\Controllers\BlogController::class, "addAvis"]);
+Route::get("/blogs/{blog_id}/avis", [\App\Http\Controllers\BlogController::class, "getAvisByBlog"]);

@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\BlogCollection;
+use App\Http\Resources\BlogResource;
 use App\Models\Blog;
+use App\traits\ResponseTrait;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class BlogController extends Controller
 {
+
+    use ResponseTrait;
     /**
      * Display a listing of the resource.
      */
@@ -42,9 +47,23 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Blog $blog)
+    public function show(Request $request)
     {
-        //
+        $blog = Blog::find($request->id);
+        if (!$blog) {
+            return $this->responseData(
+                "Blog not found",
+                Response::HTTP_NOT_FOUND,
+                "",
+                null
+            );
+        }
+        return $this->responseData(
+            "Blog found",
+            Response::HTTP_OK,
+            "",
+            BlogResource::make($blog)
+        );
     }
 
     /**
@@ -62,4 +81,53 @@ class BlogController extends Controller
     {
         //
     }
+
+    public function addAvis(Request $request){
+        $blog = Blog::find($request->blog_id);
+        if (!$blog) {
+            return $this->responseData(
+                "Blog not found",
+                Response::HTTP_NOT_FOUND,
+                "",
+                null
+            );
+        }
+
+        $blog->avis()->create([
+            "firstName" => $request->firstName,
+            "lastName" => $request->lastName,
+            "email" => $request->email,
+            "pays" => $request->pays,
+            "content" => $request['content'],
+        ]);
+
+        return $this->responseData(
+            "Avis added successfully",
+            Response::HTTP_CREATED,
+            "",
+            $blog->avis
+        );
+    }
+
+
+    public function getAvisByBlog(Request $request)
+    {
+        $blog = Blog::find($request->blog_id);
+        if (!$blog) {
+            return $this->responseData(
+                "Blog not found",
+                Response::HTTP_NOT_FOUND,
+                "",
+                null
+            );
+        }
+        return $this->responseData(
+            "Avis added successfully",
+            Response::HTTP_CREATED,
+            "",
+            $blog->avis
+        );
+    }
+
+
 }

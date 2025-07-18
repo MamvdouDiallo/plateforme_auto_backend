@@ -25,6 +25,7 @@ class BlogResource extends JsonResource
                 "name"=>$tag->name
             ]),
             "date" => $this->created_at->format('Y-m-d'),
+            "rate" => $this->average_rating
         ];
     }
 }
