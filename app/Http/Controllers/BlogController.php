@@ -98,6 +98,7 @@ class BlogController extends Controller
             "lastName" => $request->lastName,
             "email" => $request->email,
             "pays" => $request->pays,
+            "rate" => $request->rate,
             "content" => $request['content'],
         ]);
 
