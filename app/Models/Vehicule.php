@@ -44,6 +44,13 @@ protected $fillable = [
     'image3',
     'image4',
     'image5',
+    'image6',
+    'image7',
+    'image8',
+    'image9',
+    'image10',
+    'image11',
+    'image12',
     'size',
     'condition',
     'engine',
@@ -95,6 +102,13 @@ public function getTempImagesAttribute()
             $this->image3,
             $this->image4,
             $this->image5,
+            $this->image6,
+            $this->image7,
+            $this->image8,
+            $this->image9,
+            $this->image10,
+            $this->image11,
+            $this->image12
         ]);
     }
 

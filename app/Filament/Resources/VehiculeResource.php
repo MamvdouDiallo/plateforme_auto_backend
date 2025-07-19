@@ -210,6 +210,48 @@ class VehiculeResource extends Resource
                         ->image()
                         ->directory('vehicules/images')
                         ->nullable(),
+
+                        Forms\Components\FileUpload::make('image6')
+                        ->label('Image 6')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+
+                        Forms\Components\FileUpload::make('image7')
+                        ->label('Image 7')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+
+                        Forms\Components\FileUpload::make('image8')
+                        ->label('Image 8')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+
+                        Forms\Components\FileUpload::make('image9')
+                        ->label('Image 9')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+
+                        Forms\Components\FileUpload::make('image10')
+                        ->label('Image 10')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+
+                        Forms\Components\FileUpload::make('image11')
+                        ->label('Image 11')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
+
+                        Forms\Components\FileUpload::make('image12')
+                        ->label('Image 12')
+                        ->image()
+                        ->directory('vehicules/images')
+                        ->nullable(),
                 ])
                 ->columns(2), 
   
